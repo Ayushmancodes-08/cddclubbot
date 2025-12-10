@@ -5,7 +5,7 @@ module.exports = {
     BASE_HASHTAGS: "#cddclubpmec",
     HASHTAG_COUNT: "5-6",
     CRON_SCHEDULES: {
-        MORNING: '50 14 * * *',  // 2:50 PM IST (testing)
+        MORNING: '55 14 * * *',  // 2:55 PM IST (testing)
         EVENING: '0 20 * * *'
     },
     PERSONA: {
