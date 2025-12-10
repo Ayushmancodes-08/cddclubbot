@@ -8,6 +8,8 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: RENDER_EXTERNAL_URL
+        value: https://cddclubbot.onrender.com
       - key: TWITTER_APP_KEY
         sync: false
       - key: TWITTER_APP_SECRET
