@@ -154,6 +154,7 @@ class RotationManager {
                 const errorMsg = error.message || '';
                 const isRateLimit = errorMsg.includes('429') || errorMsg.includes('Quota') || errorMsg.includes('RESOURCE_EXHAUSTED');
                 const isModelError = errorMsg.includes('404') || errorMsg.includes('not found') || errorMsg.includes('not supported');
+                const isOverloaded = errorMsg.includes('503') || errorMsg.includes('overloaded') || errorMsg.includes('Service Unavailable');
 
                 if (isModelError) {
                     // Model not available, mark it and try next model
@@ -162,6 +163,15 @@ class RotationManager {
                         // No more models, try next key with first model
                         this.currentModelIndex = 0;
                         this.rotateKey();
+                    }
+                } else if (isOverloaded) {
+                    // Model overloaded (503) - wait briefly and try another model
+                    logger.log("Model overloaded (503). Rotating model...", 'WARNING');
+                    this.markModelRateLimited(modelName, 30000); // 30s cooldown
+                    if (!this.rotateModel()) {
+                        // No more models, wait and reset
+                        await new Promise(r => setTimeout(r, 5000));
+                        this.currentModelIndex = 0;
                     }
                 } else if (isRateLimit) {
                     // Rate limited - could be key or model specific
