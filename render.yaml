@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: coding-club-bot
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: TWITTER_APP_KEY
+        sync: false
+      - key: TWITTER_APP_SECRET
+        sync: false
+      - key: TWITTER_ACCESS_TOKEN
+        sync: false
+      - key: TWITTER_ACCESS_SECRET
+        sync: false
+      - key: GEMINI_API_KEYS
+        sync: false

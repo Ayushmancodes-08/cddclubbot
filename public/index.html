@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Club Bot | Command Center</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#151b23', // GitHub Dark Dim
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar for Webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #334155;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #475569;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-[#0d1117] text-slate-200 font-sans min-h-screen flex items-center justify-center p-4 selection:bg-blue-500/30">
+
+    <div
+        class="w-full max-w-4xl bg-[#161b22]/80 backdrop-blur-xl border border-slate-700/50 rounded-2xl shadow-2xl p-6 md:p-8 animate-fade-in relative overflow-hidden">
+
+        <!-- Background Gradient Globs -->
+        <div
+            class="absolute top-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+        </div>
+        <div
+            class="absolute bottom-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-[100px] translate-x-1/2 translate-y-1/2 pointer-events-none">
+        </div>
+
+        <!-- Header -->
+        <header
+            class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-slate-700/50 pb-6 relative z-10">
+            <div>
+                <h1
+                    class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400 mb-2">
+                    Coding Club Bot <span class="text-2xl">🤖</span>
+                </h1>
+                <p class="text-slate-400 text-sm">Automated Twitter Engagement System</p>
+            </div>
+
+            <div
+                class="mt-4 md:mt-0 flex items-center gap-2 bg-green-500/10 border border-green-500/20 px-3 py-1.5 rounded-full text-green-400 text-sm font-medium">
+                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                System Online
+            </div>
+        </header>
+
+        <!-- Stats Grid -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 relative z-10">
+            <!-- Stat 1 -->
+            <div
+                class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-4 hover:border-blue-500/30 transition-colors group">
+                <div
+                    class="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-1 group-hover:text-blue-400 transition-colors">
+                    Next Scheduled Run</div>
+                <div class="text-xl font-bold text-white tracking-tight" id="next-run">Calculating...</div>
+            </div>
+
+            <!-- Stat 2 -->
+            <div
+                class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-4 hover:border-purple-500/30 transition-colors group">
+                <div
+                    class="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-1 group-hover:text-purple-400 transition-colors">
+                    Bot Mode</div>
+                <div class="text-xl font-bold text-white tracking-tight flex items-center gap-2" id="bot-mode">
+                    Autonomous
+                    <svg class="w-4 h-4 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Stat 3 -->
+            <div
+                class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-4 hover:border-cyan-500/30 transition-colors group">
+                <div
+                    class="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-1 group-hover:text-cyan-400 transition-colors">
+                    Active Model</div>
+                <div class="text-xl font-bold text-white tracking-tight" id="active-model">Gemini 1.5 Flash</div>
+            </div>
+        </section>
+
+        <!-- Actions -->
+        <section class="mb-8 relative z-10">
+            <button id="run-btn"
+                class="group relative inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_25px_rgba(37,99,235,0.5)] w-full md:w-auto overflow-hidden">
+                <div
+                    class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:animate-[shimmer_1.5s_infinite]">
+                </div>
+                <svg class="w-5 h-5 transition-transform group-hover:rotate-12" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                <span>Trigger Manual Run</span>
+            </button>
+        </section>
+
+        <!-- Console -->
+        <section class="rounded-xl overflow-hidden border border-slate-800 bg-[#0d1117] shadow-inner relative z-10">
+            <div class="flex items-center justify-between px-4 py-2 bg-[#161b22] border-b border-slate-800">
+                <div class="flex items-center gap-2">
+                    <div class="flex gap-1.5">
+                        <div class="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
+                    </div>
+                    <span class="text-xs text-slate-400 font-mono ml-2">system.log</span>
+                </div>
+                <span id="connection-status" class="text-xs font-medium text-green-400 flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span> Connected
+                </span>
+            </div>
+
+            <div id="console-logs" class="h-80 overflow-y-auto p-4 font-mono text-sm space-y-1">
+                <!-- Logs injected here -->
+            </div>
+        </section>
+
+        <footer class="mt-6 text-center text-xs text-slate-600 relative z-10">
+            &copy; 2025 Coding Club Bot. Powered by Gemini & auto-magic.
+        </footer>
+    </div>
+
+    <!-- Script loaded at the end -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+
+    <!-- Custom Scroll Helper Logic if needed specific to Tailwind classes, mostly handled by utility classes now -->
+    <script>
+        // Override the addLog function in script.js to use Tailwind classes?
+        // Actually, script.js adds classes like 'log-INFO'.
+        // We can define these classes in the <style> or tailwind config,
+        // OR we can update script.js to inject fully styled elements.
+        // For least friction, let's keep script.js simple and Map the classes here using <style> block or just update script.js.
+        // Let's UPDATE script.js to be cleaner with Tailwind.
+    </script>
+</body>
+
+</html>
