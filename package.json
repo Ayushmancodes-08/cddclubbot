@@ -1,0 +1,22 @@
+{
+  "name": "coding-club-bot",
+  "version": "1.0.0",
+  "description": "A Twitter bot that posts coding tips using Gemini AI",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "axios": "^1.13.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "node-cron": "^4.2.1",
+    "socket.io": "^4.8.1",
+    "twitter-api-v2": "^1.28.0"
+  }
+}
